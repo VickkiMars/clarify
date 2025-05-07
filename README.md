@@ -54,7 +54,7 @@ Currently, it defines two schemas:
 * `ClarifyRequestSchema`: Defines the expected structure for the POST request to the `api/clarify` endpoint, which includes a required `topic` field of type string.
 * `ClarifyResponseSchema`: Defines the structure of the JSON response sent back by the JSON response sent back by the `api/clarify` endpoint, which includes a required `explanation` field of type string.
 
-# TODO: `backend/app/logic/explanation_generator.py` | `backend/app/logic/main_extractor.py` | `backend/app/logic/term_extractor.py`
+**TODO: `backend/app/logic/explanation_generator.py` | `backend/app/logic/main_extractor.py` | `backend/app/logic/term_extractor.py`**
 
 # Integrating with react.js
 
