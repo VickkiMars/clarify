@@ -1,0 +1,12 @@
+flask
+flask-cors
+google-genai
+google-api-core
+marshmallow
+python-dotenv
+fake-useragent
+requests
+duckduckgo-search
+langchain-google-genai
+pyqt5
+markdown
