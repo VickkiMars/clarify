@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neomorphic Tooltips - AI Startup Style</title>
+
+  <!-- Load Inter and Space Grotesk -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      padding: 30px;
+      background: #e0e5ec;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    h1 {
+      font-weight: 600;
+    }
+
+    .highlight {
+      color: #0077cc;
+      text-decoration: underline;
+      cursor: pointer;
+      position: relative;
+      font-weight: 600;
+    }
+
+    .dynamic-tooltip {
+      position: absolute;
+      background: #e0e5ec;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 
+        8px 8px 15px #babecc, 
+        -8px -8px 15px #ffffff;
+      z-index: 1000;
+      max-width: 280px;
+      font-size: 14px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      font-family: 'Space Grotesk', sans-serif; /* Use Space Grotesk only inside tooltips */
+    }
+
+    .dynamic-tooltip.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .tooltip-header {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: left;
+      color: #222;
+    }
+
+    .tooltip-hr {
+      border: none;
+      height: 1px;
+      background: #ccc;
+      margin: 10px 0;
+    }
+
+    .tooltip-body {
+      font-size: 14px;
+      color: #555;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>What is Machine Learning?</h1>
+
+  <p>
+    <span class="highlight" data-word="Machine Learning" data-tooltip="A field of AI where computers learn from data without being explicitly programmed.">Machine Learning</span>
+    is a branch of 
+    <span class="highlight" data-word="Artificial Intelligence" data-tooltip="Making computers perform tasks typically requiring human intelligence.">Artificial Intelligence</span>
+    that allows systems to automatically learn and improve from experience. A
+    <span class="highlight" data-word="Model" data-tooltip="A mathematical structure that makes predictions based on data.">model</span>
+    is trained using large amounts of 
+    <span class="highlight" data-word="Data" data-tooltip="Collections of facts, figures, or observations used for analysis.">data</span>
+    to make predictions or decisions without being explicitly programmed.
+  </p>
+
+  <script>
+    const highlights = document.querySelectorAll('.highlight');
+
+    highlights.forEach(item => {
+      let tooltip;
+
+      const showTooltip = (e) => {
+        const word = item.getAttribute('data-word');
+        const tooltipText = item.getAttribute('data-tooltip');
+
+        tooltip = document.createElement('div');
+        tooltip.className = 'dynamic-tooltip';
+
+        tooltip.innerHTML = `
+          <h1 class="tooltip-header">${word}</h1>
+          <hr class="tooltip-hr">
+          <div class="tooltip-body">${tooltipText}</div>
+        `;
+
+        document.body.appendChild(tooltip);
+
+        const rect = item.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        let top = rect.bottom + 12;
+        let left = rect.left + (rect.width - tooltipRect.width) / 2;
+
+        // Overflow handling
+        if (top + tooltipRect.height > window.innerHeight) {
+          top = rect.top - tooltipRect.height - 12;
+        }
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > window.innerWidth) {
+          left = window.innerWidth - tooltipRect.width - 8;
+        }
+
+        tooltip.style.top = `${top + window.scrollY}px`;
+        tooltip.style.left = `${left + window.scrollX}px`;
+
+        requestAnimationFrame(() => {
+          tooltip.classList.add('show');
+        });
+      };
+
+      const hideTooltip = () => {
+        if (tooltip) {
+          tooltip.remove();
+          tooltip = null;
+        }
+      };
+
+      item.addEventListener('mouseenter', showTooltip);
+      item.addEventListener('mouseleave', hideTooltip);
+
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (tooltip) {
+          hideTooltip();
+        } else {
+          showTooltip(e);
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (tooltip && !item.contains(e.target)) {
+          hideTooltip();
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
