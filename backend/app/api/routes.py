@@ -12,8 +12,8 @@ def clarify_topic():
     try:
         data = clarify_request_schema.load(request.get_json())
         topic = data['topic']
-        explanation, terms = generate_explanation(topic)
-        result = clarify_response_schema.dump({'explanation':explanation, 'terms':f"\n{terms}"})
+        explanation, terms, sources = generate_explanation(topic)
+        result = clarify_response_schema.dump({'explanation':explanation, 'terms':f"\n{terms}", 'sources':{sources}})
         return jsonify(result), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500

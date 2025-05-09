@@ -9,4 +9,6 @@ requests
 duckduckgo-search
 langchain-google-genai
 pyqt5
+trafilatura
 markdown
+lxml-html-clean
