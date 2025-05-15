@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Markdown to HTML Preview</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+
+    textarea {
+      width: 40%;
+      padding: 1em;
+      font-size: 1em;
+      border: none;
+      border-right: 1px solid #ccc;
+      resize: none;
+    }
+
+    .preview {
+      width: 60%;
+      padding: 1em;
+      overflow-y: auto;
+    }
+
+    /* === Markdown Styles === */
+    .preview h1, .preview h2, .preview h3 {
+      color: #1a1a66;
+      font-weight: bold;
+    }
+
+    .preview h2, .preview h3 {
+      color: #2b3d5b;
+    }
+
+    .preview strong {
+      color: #00796b;
+    }
+
+    .preview em {
+      color: #ffca28;
+      font-style: italic;
+    }
+
+    .preview ul li::marker {
+      color: #1976d2;
+    }
+
+    .preview a {
+      color: #0645AD;
+      text-decoration: underline;
+    }
+
+    .preview blockquote {
+      background-color: #f5f5f5;
+      border-left: 4px solid #00796b;
+      padding-left: 1em;
+      color: #333;
+      font-style: italic;
+    }
+
+    .preview code {
+      background-color: #e8f0fe;
+      font-family: monospace;
+      padding: 0.2em 0.4em;
+      border-radius: 3px;
+      color: #000;
+    }
+
+    .preview pre code {
+      display: block;
+      background-color: #e8f0fe;
+      padding: 1em;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <textarea id="markdown-input" placeholder="Enter markdown here..."># Hello Markdown
+
+## Subheading
+
+This is **bold**, *italic*, and a [link](https://example.com).
+
+- List item 1
+- List item 2
+
+> A blockquote
+
+`inline code`
+
+  </textarea>
+
+  <div id="preview" class="preview"></div>
+
+  <script>
+    const textarea = document.getElementById('markdown-input');
+    const preview = document.getElementById('preview');
+
+    function updatePreview() {
+      const markdown = textarea.value;
+      const html = marked.parse(markdown);
+      preview.innerHTML = html;
+    }
+
+    textarea.addEventListener('input', updatePreview);
+    window.addEventListener('load', updatePreview);
+  </script>
+
+</body>
+</html>
