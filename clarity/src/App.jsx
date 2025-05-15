@@ -10,25 +10,48 @@ const App = () => {
   const [isThinking, setIsThinking] = useState(false);
   const [cardsEnabled, setCardsEnabled] = useState(true);
 
-  const handleSendMessage = (text) => {
-    setMessages([...messages, { sender: 'user', content: text }]);
+  const handleSendMessage = async (text) => {
+    setMessages(prev => [...prev, { sender: 'user', content: text }]);
     setIsThinking(true);
 
-    setTimeout(() => {
-      const markdown = `# The Conclave
-**The Conclave** is an elite group of scholars.
-## Members
-- **Alice**
-- **Bob**
-- **Eve**
+    try {
+      const response = await fetch('http://127.0.0.1:5000/api/clarify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ topic: text }),
+      });
 
-# Objectives
-*Research*, *publish*, and *mentor*.`;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData?.error || 'Failed to get clarification');
+      }
 
-      // Store raw markdown string for rendering
-      setMessages(prev => [...prev, { sender: 'system', content: markdown, isMarkdown: true }]);
+      const data = await response.json();
+
+      const htmlContent = marked.parse(data.explanation || '');
+
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'system',
+          content: htmlContent,
+          isMarkdown: true,
+        },
+      ]);
+    } catch (error) {
+      setMessages(prev => [
+        ...prev,
+        {
+          sender: 'system',
+          content: `Error: ${error.message || 'Failed to communicate with the server.'}`,
+          isMarkdown: false,
+        },
+      ]);
+    } finally {
       setIsThinking(false);
-    }, 2000);
+    }
   };
 
   return (
@@ -45,8 +68,7 @@ const App = () => {
         px={2}
         py={1}
       >
-        {/* Toggle Button */}
-        <Box mb={2}>
+        <Box mb={2} textAlign="left">
           <Button
             variant="outlined"
             onClick={() => setCardsEnabled(prev => !prev)}

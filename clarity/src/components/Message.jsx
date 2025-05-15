@@ -10,7 +10,7 @@ const Message = ({ message, containerRef, cardsEnabled }) => {
 
   const bgColor = isUser
     ? theme.palette.mode === 'dark' ? '#333' : '#e0e0e0'
-    : theme.palette.mode === 'dark' ? '#555' : '#E5E4E2';
+    : theme.palette.mode === 'dark' ? '#555' : '#b9e3fd';
 
   if (message.sender === 'system') {
     // Convert markdown to raw HTML

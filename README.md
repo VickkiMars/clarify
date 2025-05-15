@@ -79,6 +79,9 @@ Currently, it defines two schemas:
 - Consider loading states
 - Error display.
 
-Omo!
+# Clarity
+**React application for clarify**
+
+``` npm run dev``` on local to interact with the UI
 
 
