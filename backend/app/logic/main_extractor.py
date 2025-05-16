@@ -106,7 +106,9 @@ def summarize_content(content: str, query: str, minutes:int)-> tuple:
         - Ongoing Research and Developments
         - Misconceptions
         
-        Take any combination of these outlines that properly explain {query} and in exactly than {n_words} words, combine the sources and summarily explain the following content, the summary should not indicate that more than one source was used, it should be a general summarization of the sources with selected outlines as headings.
+        Take any combination of these outlines that properly explain {query} and in exactly than {n_words} words, combine the sources and summarily explain the following content, the summary should not indicate that more than one source was used, it should be a general summarization of the sources with selected outlines as headings. 
+        
+        Return your summary in markdown and properly highlight (using '#') important concepts, words that may require more explanation and any other things you deem necessary.
 
         Content:
         {content}
@@ -183,7 +185,7 @@ def retrieve_and_summarize(query: str) -> tuple:
 
 
 if __name__ == "__main__":
-    query = "Conclave"
+    query = "Quantum Py"
     result, terms, sources  = retrieve_and_summarize(query)
     print("\nSummary:\n", result)
     print(f"\n {terms}") if terms else print("None")

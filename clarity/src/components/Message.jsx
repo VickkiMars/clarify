@@ -1,22 +1,18 @@
 import React from 'react';
 import { Box, useTheme } from '@mui/material';
-import { marked } from 'marked';
 import { wrapMarkdownSectionsInCards } from '../utils/markdownUtils';
+import { marked } from 'marked';
 
-const Message = ({ message, containerRef, cardsEnabled }) => {
+const Message = ({ message, cardsEnabled }) => {
   const theme = useTheme();
-
   const isUser = message.sender === 'user';
 
   const bgColor = isUser
     ? theme.palette.mode === 'dark' ? '#333' : '#e0e0e0'
-    : theme.palette.mode === 'dark' ? '#555' : '#b9e3fd';
+    : theme.palette.mode === 'dark' ? '#555' : '#D3D3D3';
 
   if (message.sender === 'system') {
-    // Convert markdown to raw HTML
-    const rawHtml = marked.parse(message.content);
-    
-    // Conditionally wrap in cards
+    const rawHtml = marked(message.content);
     const finalHtml = cardsEnabled
       ? wrapMarkdownSectionsInCards(rawHtml)
       : rawHtml;
@@ -24,7 +20,7 @@ const Message = ({ message, containerRef, cardsEnabled }) => {
     return (
       <Box
         sx={{
-          maxWidth: '100%',
+          maxWidth: '90%',
           padding: 1.5,
           marginBottom: 1,
           borderRadius: '16px',
@@ -35,7 +31,6 @@ const Message = ({ message, containerRef, cardsEnabled }) => {
           whiteSpace: 'pre-wrap',
         }}
         className="markdown-content"
-        ref={containerRef}
         dangerouslySetInnerHTML={{ __html: finalHtml }}
       />
     );

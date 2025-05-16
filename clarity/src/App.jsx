@@ -1,82 +1,71 @@
 import React, { useState } from 'react';
+import { Box, Button } from '@mui/material';
 import InputBar from './components/InputBar';
 import ChatArea from './components/ChatArea';
 import BarLoaderIndicator from './components/BarLoaderIndicator';
-import { Box, Button } from '@mui/material';
-import { marked } from 'marked';
+import './App.css';
 
 const App = () => {
   const [messages, setMessages] = useState([]);
   const [isThinking, setIsThinking] = useState(false);
   const [cardsEnabled, setCardsEnabled] = useState(true);
 
-  const handleSendMessage = async (text) => {
-    setMessages(prev => [...prev, { sender: 'user', content: text }]);
+  const predefinedMarkdown = `
+# Introduction
+This is a **Markdown** response. It includes various elements to test the \`markdownUtils.js\`.
+
+## Features
+## More features 
+
+- Headings (H1–H3)
+- **Bold text** and *italic text*
+- \`inline code\`
+- Lists
+- Code blocks
+- Blockquotes
+
+### Code Sample
+\`\`\`js
+function greet(name) {
+  return \`Hello, \${name}!\`;
+}
+\`\`\`
+
+### Blockquote
+> This is a sample blockquote.
+
+# Next Section
+Here's more markdown content for testing purposes.
+`;
+
+  const handleSendMessage = (userText) => {
+    setMessages(prev => [...prev, { sender: 'user', content: userText }]);
     setIsThinking(true);
 
-    try {
-      const response = await fetch('http://127.0.0.1:5000/api/clarify', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ topic: text }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData?.error || 'Failed to get clarification');
-      }
-
-      const data = await response.json();
-
-      const htmlContent = marked.parse(data.explanation || '');
-
+    setTimeout(() => {
       setMessages(prev => [
         ...prev,
         {
           sender: 'system',
-          content: htmlContent,
+          content: predefinedMarkdown,
           isMarkdown: true,
         },
       ]);
-    } catch (error) {
-      setMessages(prev => [
-        ...prev,
-        {
-          sender: 'system',
-          content: `Error: ${error.message || 'Failed to communicate with the server.'}`,
-          isMarkdown: false,
-        },
-      ]);
-    } finally {
       setIsThinking(false);
-    }
+    }, 1000); // Simulate response delay
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      height="100dvh"
-      width="100vw"
-      overflow="hidden"
-    >
-      <Box
-        flexGrow={1}
-        overflow="auto"
-        px={2}
-        py={1}
-      >
-        <Box mb={2} textAlign="left">
-          <Button
-            variant="outlined"
-            onClick={() => setCardsEnabled(prev => !prev)}
-          >
-            {cardsEnabled ? 'Disband Cards' : 'Enable Cards'}
-          </Button>
-        </Box>
+    <Box display="flex" flexDirection="column" height="100dvh" width="100vw" overflow="hidden">
+      {/* Top: Toggle Button */}
+      <Box px={2} py={1} bgcolor="#f9f9f9" borderBottom="1px solid #ccc">
+        <Button variant="outlined" onClick={() => setCardsEnabled(prev => !prev)}>
+          {cardsEnabled ? 'Disband Cards' : 'Enable Cards'}
+        </Button>
+      </Box>
 
+      {/* Middle: Chat Area */}
+      <Box flexGrow={1} overflow="auto" px={2} py={1}>
         <ChatArea
           messages={messages}
           isSystemThinking={isThinking}
@@ -85,13 +74,8 @@ const App = () => {
         />
       </Box>
 
-      <Box
-        px={2}
-        py={1}
-        borderTop="1px solid #ccc"
-        bgcolor="#fff"
-        position="relative"
-      >
+      {/* Bottom: Input */}
+      <Box px={2} py={1} borderTop="1px solid #ccc" bgcolor="#fff">
         <InputBar onSendMessage={handleSendMessage} />
       </Box>
     </Box>

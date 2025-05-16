@@ -94,23 +94,24 @@ html, body, #root {
   gap: 1rem;
   padding: 1rem 0;
   scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+  -webkit-overflow-scrolling: touch;
+  align-items: flex-start;  /* add this */
 }
 
 .markdown-card {
-  flex: 0 0 300px; /* fixed width */
+  flex: 0 0 300px;
   scroll-snap-align: start;
-  background: #e0e0e0; /* soft light grey background */
+  background: #e0e0e0;
   border-radius: 16px;
   padding: 1.5rem;
   box-shadow:
-    8px 8px 15px #bebebe,   /* darker shadow bottom right */
-    -8px -8px 15px #ffffff; /* lighter highlight top left */
+    8px 8px 15px #bebebe,
+    -8px -8px 15px #ffffff;
   transition: box-shadow 0.3s ease;
-
-  /* Optional: subtle hover effect */
-  cursor: pointer;
+  height: fit-content;    /* add this */
+  align-self: flex-start; /* add this */
 }
+
 .markdown-card:hover {
   box-shadow:
     4px 4px 10px #b8b8b8,

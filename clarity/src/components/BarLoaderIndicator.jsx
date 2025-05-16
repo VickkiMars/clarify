@@ -1,33 +1,39 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { motion, useAnimationControls } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const BarLoaderIndicator = () => {
-  const controls = useAnimationControls();
-
-  useEffect(() => {
-    const animateBar = async () => {
-      await controls.start({
-        x: '100%',
-        transition: {
-          duration: 1.5,
-          repeat: Infinity,
-          repeatType: 'loop',
-          ease: 'linear',
-        },
-      });
-    };
-    controls.start({ x: '-100%' });
-    animateBar();
-  }, [controls]);
-
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-      <Typography variant="body2" color="textSecondary">Thinking...</Typography>
-      <Box sx={{ width: '10.4px', height: '10.4px', overflow: 'hidden', border: '1px solid currentColor', borderRadius: '5.2px' }}>
+      <Typography variant="body2" color="text.secondary">Thinking</Typography>
+      <Box
+        sx={{
+          width: 80,
+          height: 8,
+          overflow: 'hidden',
+          borderRadius: '4px',
+          position: 'relative',
+          backgroundColor: '#e0e0e0',
+        }}
+      >
         <motion.div
-          animate={controls}
-          style={{ width: '100%', height: '100%', backgroundColor: 'currentColor', borderRadius: '5.2px' }}
+          style={{
+            height: '100%',
+            width: '40%',
+            backgroundColor: '#000',
+            borderRadius: '4px',
+            position: 'absolute',
+            left: 0,
+          }}
+          animate={{
+            x: ['-40%', '100%'],
+            opacity: [0.3, 1, 0.3],
+          }}
+          transition={{
+            duration: 1.6,
+            ease: 'easeInOut',
+            repeat: Infinity,
+          }}
         />
       </Box>
     </Box>
