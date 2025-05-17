@@ -22,19 +22,19 @@ html, body, #root {
 .markdown-content h1 {
   color: #000000; /* Dark Blue */
   font-weight: bold;
-  margin-top: 0em;
-  margin-bottom: 0em;
+  margin-top: 0.2em; /* Reduced top margin */
+  margin-bottom: 0.2em; /* Reduced bottom margin */
 }
 
 .markdown-content h2,
 .markdown-content h3 {
   color: #2b3d5b; /* Muted Navy */
   font-weight: bold;
-  margin-top: 0em;
-  margin-bottom: 0.5em;
+  margin-top: 0.3em; /* Reduced top margin */
+  margin-bottom: 0.3em; /* Reduced bottom margin */
 }
 
-.markdown-content strong, 
+.markdown-content strong,
 .markdown-content b {
   color: #ffffff;               /* Light Blue Text */
   background-color: #03123b;    /* Deep Blue Background */
@@ -54,6 +54,19 @@ html, body, #root {
   display: inline;
 }
 
+.markdown-content ul,
+.markdown-content ol {
+  margin-top: 0.2em; /* Reduced top margin for lists */
+  margin-bottom: 0.2em; /* Reduced bottom margin for lists */
+  padding-left: 1em;
+}
+
+.markdown-content ul li,
+.markdown-content ol li {
+  margin-top: 0em; /* Reduced top margin for list items */
+  margin-bottom: 0.1em; /* Reduced bottom margin for list items */
+}
+
 .markdown-content ul li::marker {
   color: #1976d2; /* Blue bullets */
 }
@@ -69,7 +82,7 @@ html, body, #root {
   padding-left: 1em;
   color: #333;
   font-style: italic;
-  margin: 1em 0;
+  margin: 0.5em 0; /* Reduced top and bottom margin for blockquote */
 }
 
 .markdown-content code {
@@ -83,9 +96,11 @@ html, body, #root {
 .markdown-content pre code {
   display: block;
   background-color: #e8f0fe;
-  padding: 1em;
+  padding: 0.8em; /* Slightly reduced padding */
   overflow-x: auto;
   border-radius: 6px;
+  margin-top: 0.3em; /* Reduced top margin */
+  margin-bottom: 0.3em; /* Reduced bottom margin */
 }
 
 .markdown-cards-scroll-wrapper {
@@ -103,7 +118,7 @@ html, body, #root {
   scroll-snap-align: start;
   background: #e0e0e0;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1rem; /* Reduced padding around the card */
   box-shadow:
     8px 8px 15px #bebebe,
     -8px -8px 15px #ffffff;
@@ -118,7 +133,18 @@ html, body, #root {
     -4px -4px 10px #ffffff;
 }
 
+.markdown-card > * { /* Target direct children within the card */
+  margin-top: 0em; /* Further reduce top margin for direct children */
+  margin-bottom: 0em; /* Further reduce bottom margin for direct children */
+}
 
+.markdown-card > *:first-child { /* Remove top margin for the very first element */
+  margin-top: 0;
+}
+
+.markdown-card > *:last-child { /* Remove bottom margin for the very last element */
+  margin-bottom: 0;
+}
 
 a {
   font-weight: 500;

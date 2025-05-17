@@ -5,36 +5,39 @@ export function wrapMarkdownSectionsInCards(html) {
   const children = Array.from(tempDiv.childNodes);
   const sections = [];
   let currentSection = null;
-  let currentLevel = null;
 
   children.forEach((node) => {
     if (node.nodeType === 1 && /^H[1-6]$/.test(node.tagName)) {
-      const nodeLevel = parseInt(node.tagName.charAt(1), 10);
-
-      if (currentSection === null) {
-        // Start the first section
-        currentSection = document.createElement('div');
-        currentSection.className = 'markdown-card';
-        currentLevel = nodeLevel;
-      } else if (nodeLevel !== currentLevel) {
-        // Different level heading starts a new section
+      // If there's an existing section, push it to the sections array
+      if (currentSection) {
         sections.push(currentSection);
-        currentSection = document.createElement('div');
-        currentSection.className = 'markdown-card';
-        currentLevel = nodeLevel;
       }
-      // If nodeLevel === currentLevel, continue appending in the same section
-    } else if (currentSection === null) {
-      // If first node(s) are not headings, start a section with null level
+      // Start a new section with the current heading
       currentSection = document.createElement('div');
       currentSection.className = 'markdown-card';
-      currentLevel = null;
+      currentSection.appendChild(node.cloneNode(true)); // Clone the heading into the new section
+    } else {
+      // If it's not a heading and there's an active section, append it
+      if (currentSection) {
+        currentSection.appendChild(node.cloneNode(true)); // Clone the node
+      } else {
+        // If it's not a heading and no active section (content before first heading)
+        // Create a default section for this initial content
+        if (!sections.length && !currentSection) {
+          currentSection = document.createElement('div');
+          currentSection.className = 'markdown-card';
+        }
+        if (currentSection) {
+          currentSection.appendChild(node.cloneNode(true)); // Clone the node
+        }
+      }
     }
-
-    currentSection.appendChild(node);
   });
 
-  if (currentSection) sections.push(currentSection);
+  // Push the last currentSection if it exists
+  if (currentSection) {
+    sections.push(currentSection);
+  }
 
   const scrollWrapper = document.createElement('div');
   scrollWrapper.className = 'markdown-cards-scroll-wrapper';

@@ -23,22 +23,29 @@ const App = () => {
         },
         body: JSON.stringify({ topic: text }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData?.error || 'Failed to get clarification');
       }
 
       const data = await response.json();
-      const rawMarkdown = `\n${data.explanation || ''}\n`;
-      const htmlContent = marked.parse(rawMarkdown);
+      let markdownContent = data.explanation || '';
+
+      // Extract the text content if it's in the ```markdown ... text``` format
+      const markdownMatch = markdownContent.match(/^```markdown\s*([\s\S]*?)```$/i);
+      if (markdownMatch && markdownMatch[1]) {
+        markdownContent = markdownMatch[1].trim();
+      }
+
+      const htmlContent = marked.parse(markdownContent);
 
       setMessages(prev => [
         ...prev,
         {
           sender: 'system',
           content: htmlContent,
-          isMarkdown: true,
+          isMarkdown: true, // Keep isMarkdown true as we are still rendering Markdown
         },
       ]);
     } catch (error) {
